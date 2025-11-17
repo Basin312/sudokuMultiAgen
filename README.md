@@ -1,154 +1,116 @@
-sudokuMultiAgen
+# SudokuMultiAgen
 
-A simple project that builds, solves, verifies, and visualizes a Sudoku puzzle using a multi-agent system powered by Python and AutoGen.
+Sebuah proyek sederhana yang membangun, memecahkan, memverifikasi, dan memvisualisasikan puzzle Sudoku menggunakan sistem multi-agen dengan Python dan AutoGen.
 
-This project demonstrates how a team of specialized AI agents can collaborate to complete a complex, multi-step task. The agents work together by writing and executing Python code, managed by a central "Project Manager" agent.
+Proyek ini mendemonstrasikan kolaborasi tim agen AI khusus untuk menyelesaikan tugas multi-langkah, di mana mereka menulis dan mengeksekusi kode Python.
 
-How It Works (The Workflow)
+## Tim Agen
 
-The entire process is managed by a GroupChatManager agent who directs a team of specialists. The workflow is as follows:
+Sistem ini memiliki 5 agen yang dikelola oleh GroupChatManager (Manajer Proyek):
 
-User Request: The user (you) initiates the chat with a request, such as "Generate an easy Sudoku puzzle."
+1. UserProxyAgent (user)
 
-Generation: The GroupChatManager passes the task to the sudoku_generator. This agent writes Python code to create a 9x9 puzzle.
+- Peran: Pelaksana Kode ("Tangan").
 
-Execution: The user agent (acting as the code executor) receives the Python code, runs it, and prints the generated puzzle.
+- Tugas: Mengeksekusi semua kode Python yang ditulis oleh agen lain dan melaporkan hasilnya.
 
-Solving: The manager then passes the puzzle to the sudoku_solver, which writes Python code to find the solution.
+2. AssistantAgent (sudoku_generator)
 
-Execution: The user agent runs the solver's code and gets the solution.
+- Peran: Pembuat Puzzle.
 
-Verification: The manager passes the solution to the sudoku_verifier, which writes Python code to check if the solution is 100% valid (all rows, columns, and 3x3 boxes are correct).
+- Tugas: Menulis kode Python untuk membuat grid puzzle 9x9.
 
-Execution: The user agent runs the verification code.
+3. AssistantAgent (sudoku_solver)
 
-Visualization: Finally, the manager asks the sudoku_visualization agent to write Python code to print a "pretty" ASCII version of the puzzle and its solution side-by-side.
+- Peran: Pemecah Masalah.
 
-Execution: The user agent runs the visualization code, presenting the final result.
+- Tugas: Menulis kode Python untuk menemukan solusi dari puzzle yang diberikan.
 
-Termination: The sudoku_visualization agent says "TERMINATE", ending the chat.
+4. AssistantAgent (sudoku_verifier)
 
-The Agent Team (Elements of the Agents)
+- Peran: Penjamin Kualitas.
 
-This system consists of one "worker" agent and a team of four "specialist" agents.
+- Tugas: Menulis kode Python untuk memverifikasi apakah solusi 100% valid.
 
-UserProxyAgent (user)
+5. AssistantAgent (sudoku_visualization)
 
-Role: The Code Executor (The "Hands").
+- Peran: Presenter.
 
-Job: This agent represents the user and is the only agent with code_execution_config. It does not write code, but it executes all Python code provided by the other agents and reports the results (the stdout or any errors) back to the group.
+- Tugas: Menulis kode Python untuk mencetak puzzle dan solusi dalam format ASCII yang mudah dibaca.
 
-AssistantAgent (sudoku_generator)
+## Alur Kerja
 
-Role: The Puzzle Creator.
+Manajer Proyek mengarahkan tim dalam urutan yang ketat:
+Minta -> Generate -> Solve -> Verify -> Visualize -> Selesai.
 
-Job: Its system_message instructs it to be a puzzle generator. Its sole purpose is to write and provide Python code that creates a 9x9 Sudoku grid.
+## Konfigurasi Model
 
-AssistantAgent (sudoku_solver)
+Proyek ini dapat menggunakan model LLM apa pun yang kompatibel dengan API OpenAI (misalnya DeepSeek, Groq, dll.).
 
-Role: The Problem Solver.
+1. File .env
 
-Job: This agent's system_message commands it to be a Sudoku solver. It receives a puzzle and writes a Python function to find the complete and correct solution.
+Buat file .env untuk menyimpan kunci API Anda. File ini harus tetap rahasia.
 
-AssistantAgent (sudoku_verifier)
+Contoh untuk DeepSeek:
 
-Role: The Quality Assurance.
-
-Job: Its system_message defines it as a verifier. It writes Python code to check a solved 9x9 grid against all Sudoku rules (rows, columns, 3x3 boxes) and report if it's valid.
-
-AssistantAgent (sudoku_visualization)
-
-Role: The Presenter.
-
-Job: This agent's system_message instructs it to be a data visualizer. It writes Python code to print a formatted, human-readable ASCII grid for the user to see.
-
-GroupChatManager (groupChat_mgr)
-
-Role: The Project Manager.
-
-Job: This agent is an LLM itself. It reads the entire chat history and the user's initial request. Its system_message commands it to follow the strict workflow (Generate -> Solve -> Verify -> Visualize) and call the correct agent at each step.
-
-Configuration (The Model)
-
-This project is configured to be model-agnostic, meaning you can use any LLM that is compatible with the OpenAI API format (like DeepSeek, Groq, Llama, etc.).
-
-1. The .env File
-
-The agent configuration is loaded from environment variables using python-dotenv. You must create a file named .env in the same directory as your Python script.
-
-To use DeepSeek (as shown in the code), your .env file should look like this:
-
-# The API key you generated from DeepSeek
+## Kunci API dari DeepSeek
 
 DS_KEY="your-deepseek-api-key-goes-here"
 
-# The official base URL for the DeepSeek API
+## URL dasar resmi DeepSeek
 
-BASE_URL="[https://api.deepseek.com](https://api.deepseek.com)"
+BASE_URL="[https://models.github.ai/inference](https://models.github.ai/inference)""
 
-If you wanted to use OpenAI, you would change the variables to:
+## Contoh untuk OpenAI:
 
 OPENAI_KEY="your-openai-api-key-goes-here"
 
-...and then adjust the llm_config in the Python script accordingly.
+2. Objek llm_config (dalam Python)
 
-2. The llm_config Object
-
-This Python dictionary in the script is what tells AutoGen how to connect to your model:
+Objek ini membaca variabel .env Anda untuk menghubungkan AutoGen ke model.
 
 llm_config = {
 "config_list": [
-{ # "model" tells the API which model to use
+{
 "model": "deepseek-r1-0528",
-
-            # "api_key" is loaded from the .env file
-            "api_key": os.environ.get("DS_KEY"),
-
-            # "base_url" is also loaded from the .env file
-            "base_url": os.environ.get("BASE_URL"),
-        }
-    ],
-    "cache_seed": 42,      # Enables caching for consistent responses
-    "temperature": 0,      # Removes randomness for predictable results
-    "price": [0.0,0.0],    # Disables cost tracking
-
+"api_key": os.environ.get("DS_KEY"),
+"base_url": os.environ.get("BASE_URL"),
+}
+],
+"cache_seed": 42, # Mengaktifkan cache untuk respons yang konsisten
+"temperature": 0, # Menghilangkan keacakan
 }
 
-This llm_config is passed to all agents, giving them their "brain."
+## Cara Menjalankan
 
-How to Run
+1. Clone Repositori:
 
-Clone the Repository:
+   git clone [https://github.com/your-username/sudokuMultiAgen.git](https://github.com/your-username/sudokuMultiAgen.git)
+   cd sudokuMultiAgen
 
-git clone [https://github.com/your-username/sudokuMultiAgen.git](https://github.com/your-username/sudokuMultiAgen.git)
-cd sudokuMultiAgen
+2. Buat & Aktifkan Virtual Environment:
 
-Create a Python Virtual Environment:
-On Windows:
+# (Gunakan python3 -m venv envm di macOS/Linux)
 
 python -m venv envm
+
+# (Gunakan source envm/bin/activate di macOS/Linux)
+
 .\envm\Scripts\activate
 
-On macOS/Linux:
-
-python3 -m venv envm
-source envm/bin/activate
-
-Install Dependencies:
+3. Instal Dependensi:
 
 pip install -r requirements.txt
 
-Create Your .env File:
+4. Buat File .env Anda:
 
-Create a file named .env.
+   - Buat file bernama .env dan tambahkan kunci API Anda (lihat bagian "Konfigurasi").
 
-Add your API key and base URL (see "Configuration" section above).
-
-Create the Working Directory:
-The UserProxyAgent needs a "sandbox" to save and run code.
+5. Buat Direktori Kerja:
+   Agen perlu "sandbox" untuk menyimpan dan menjalankan kode.
 
 mkdir sudoku_game
 
-Run the Project!
+6. Jalankan Proyek!
 
 python your_main_script_name.py
