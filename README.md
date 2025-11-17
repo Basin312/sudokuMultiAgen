@@ -83,34 +83,34 @@ Proyek ini dapat menggunakan model LLM apa pun yang kompatibel dengan API OpenAI
 
 ## Cara Menjalankan
 
-1. Clone Repositori:
+1.  Clone Repositori:
 
-   git clone [https://github.com/your-username/sudokuMultiAgen.git](https://github.com/your-username/sudokuMultiAgen.git)
-   cd sudokuMultiAgen
+    git clone [https://github.com/your-username/sudokuMultiAgen.git](https://github.com/your-username/sudokuMultiAgen.git)
+    cd sudokuMultiAgen
 
-2. Buat & Aktifkan Virtual Environment:
+2.  Buat & Aktifkan Virtual Environment:
 
-# (Gunakan python3 -m venv envm di macOS/Linux)
+    ### (Gunakan python3 -m venv envm di macOS/Linux)
 
-python -m venv envm
+        python -m venv envm
 
-# (Gunakan source envm/bin/activate di macOS/Linux)
+    ### (Gunakan source envm/bin/activate di macOS/Linux)
 
-.\envm\Scripts\activate
+        .\envm\Scripts\activate
 
-3. Instal Dependensi:
+3.  Instal Dependensi:
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
-4. Buat File .env Anda:
+4.  Buat File .env Anda:
 
-   - Buat file bernama .env dan tambahkan kunci API Anda (lihat bagian "Konfigurasi").
+    - Buat file bernama .env dan tambahkan kunci API Anda (lihat bagian "Konfigurasi").
 
-5. Buat Direktori Kerja:
-   Agen perlu "sandbox" untuk menyimpan dan menjalankan kode.
+5.  Buat Direktori Kerja:
+    Agen perlu "sandbox" untuk menyimpan dan menjalankan kode.
 
-mkdir sudoku_game
+    mkdir sudoku_game
 
-6. Jalankan Proyek!
+6.  Jalankan Proyek!
 
-python your_main_script_name.py
+    python your_main_script_name.py
