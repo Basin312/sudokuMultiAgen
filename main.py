@@ -32,28 +32,28 @@ user = UserProxyAgent(
 # 1. sudoku generator
 sudokuGenerator = AssistantAgent(
     name = "sudoku_generator",
-    system_message = "you are responsible for generating the puzzle",
+    system_message = "you are responsible for generating a valid 9x9 the sudoku puzzle based on the difficulty level provide by the user : Easy, Medium, or Hard. After generating the puzzle explicitly call sudokuSolver.",
     llm_config = llm_config
 )
 
 # 2. sudoku solver
 sudokuSolver = AssistantAgent(
     name = "sudoku_solver",
-    system_message = "you are responsible for solving the puzzle",
+    system_message = "you are responsible for providing a solution to the given 9x9 sudoku puzzle. After generating solution explicitly call sudokuVerified. ",
     llm_config = llm_config
 )
 
 # 3. sudoku verified
 sudokuVerified = AssistantAgent(
     name = "sudoku_verifier",
-    system_message = "you are responsible for verifier the puzzle",
+    system_message = "you are responsible for verifying the given sudoku solution for 9x9 sudoku puzzle. Please consider all 9x9 sudoku puzzle rules while verifying. After verifying explicitly call sudokuVisual.",
     llm_config = llm_config
 )
 
 # 4. sudoku vizualization
 sudokuVisual = AssistantAgent(
     name = "sudoku_visualization",
-    system_message = "you are responsible for giving visualization the puzzle",
+    system_message = "generating a visually appealing sudoku puzzle along with solution to the end user.",
     llm_config = llm_config
 )
 
