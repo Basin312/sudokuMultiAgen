@@ -10,38 +10,38 @@ Sistem ini memiliki 5 agen yang dikelola oleh GroupChatManager (Manajer Proyek):
 
 1. UserProxyAgent (user)
 
-- Peran: Pelaksana Kode ("Tangan").
+   - Peran: Pelaksana Kode ("Tangan").
 
-- Tugas: Mengeksekusi semua kode Python yang ditulis oleh agen lain dan melaporkan hasilnya.
+   - Tugas: Mengeksekusi semua kode Python yang ditulis oleh agen lain dan melaporkan hasilnya.
 
 2. AssistantAgent (sudoku_generator)
 
-- Peran: Pembuat Puzzle.
+   - Peran: Pembuat Puzzle.
 
-- Tugas: Menulis kode Python untuk membuat grid puzzle 9x9.
+   - Tugas: Menulis kode Python untuk membuat grid puzzle 9x9.
 
 3. AssistantAgent (sudoku_solver)
 
-- Peran: Pemecah Masalah.
+   - Peran: Pemecah Masalah.
 
-- Tugas: Menulis kode Python untuk menemukan solusi dari puzzle yang diberikan.
+   - Tugas: Menulis kode Python untuk menemukan solusi dari puzzle yang diberikan.
 
 4. AssistantAgent (sudoku_verifier)
 
-- Peran: Penjamin Kualitas.
+   - Peran: Penjamin Kualitas.
 
-- Tugas: Menulis kode Python untuk memverifikasi apakah solusi 100% valid.
+   - Tugas: Menulis kode Python untuk memverifikasi apakah solusi 100% valid.
 
 5. AssistantAgent (sudoku_visualization)
 
-- Peran: Presenter.
+   - Peran: Presenter.
 
-- Tugas: Menulis kode Python untuk mencetak puzzle dan solusi dalam format ASCII yang mudah dibaca.
+   - Tugas: Menulis kode Python untuk mencetak puzzle dan solusi dalam format ASCII yang mudah dibaca.
 
 ## Alur Kerja
 
-Manajer Proyek mengarahkan tim dalam urutan yang ketat:
-Minta -> Generate -> Solve -> Verify -> Visualize -> Selesai.
+    Manajer Proyek mengarahkan tim dalam urutan yang ketat:
+    Minta -> Generate -> Solve -> Verify -> Visualize -> Selesai.
 
 ## Konfigurasi Model
 
@@ -49,37 +49,37 @@ Proyek ini dapat menggunakan model LLM apa pun yang kompatibel dengan API OpenAI
 
 1. File .env
 
-Buat file .env untuk menyimpan kunci API Anda. File ini harus tetap rahasia.
+   Buat file .env untuk menyimpan kunci API Anda. File ini harus tetap rahasia.
 
-Contoh untuk DeepSeek:
+   Contoh untuk DeepSeek:
 
-## Kunci API dari DeepSeek
+   ### Kunci API dari DeepSeek
 
-DS_KEY="your-deepseek-api-key-goes-here"
+   DS_KEY="your-deepseek-api-key-goes-here"
 
-## URL dasar resmi DeepSeek
+   ### URL dasar resmi DeepSeek
 
-BASE_URL="[https://models.github.ai/inference](https://models.github.ai/inference)""
+   BASE_URL="[https://models.github.ai/inference](https://models.github.ai/inference)""
 
-## Contoh untuk OpenAI:
+   ### Contoh untuk OpenAI:
 
-OPENAI_KEY="your-openai-api-key-goes-here"
+   OPENAI_KEY="your-openai-api-key-goes-here"
 
 2. Objek llm_config (dalam Python)
 
-Objek ini membaca variabel .env Anda untuk menghubungkan AutoGen ke model.
+   Objek ini membaca variabel .env Anda untuk menghubungkan AutoGen ke model.
 
-llm_config = {
-"config_list": [
-{
-"model": "deepseek-r1-0528",
-"api_key": os.environ.get("DS_KEY"),
-"base_url": os.environ.get("BASE_URL"),
-}
-],
-"cache_seed": 42, # Mengaktifkan cache untuk respons yang konsisten
-"temperature": 0, # Menghilangkan keacakan
-}
+   llm_config = {
+   "config_list": [
+   {
+   "model": "deepseek-r1-0528",
+   "api_key": os.environ.get("DS_KEY"),
+   "base_url": os.environ.get("BASE_URL"),
+   }
+   ],
+   "cache_seed": 42, # Mengaktifkan cache untuk respons yang konsisten
+   "temperature": 0, # Menghilangkan keacakan
+   }
 
 ## Cara Menjalankan
 
